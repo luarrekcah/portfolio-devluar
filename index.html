@@ -119,9 +119,10 @@
 
     <section class="hero has-background-black">
         <div class="hero-body">
-            <p class="title">Raul Rodrigues</p>
+            <p class="title">Raul Rodrigues
+                <span class="tag is-dark" id="status-tag"></span>
+            </p>
             <p class="subtitle" id="stack-info">Full Stack Developer</p>
-
             <div class="buttons">
                 <a class="button is-danger" href="/#contact">Contato</a>
                 <a class="button is-outline" href="/#projects">Projetos</a>
@@ -621,6 +622,35 @@
                 alert('Por favor, preencha todos os campos.');
             }
         }
+
+        function updateStatus() {
+            fetch('https://api.lanyard.rest/v1/users/701953428510736396')
+                .then(response => response.json())
+                .then(data => {
+                    const status = data.data.discord_status;
+                    const tag = document.getElementById('status-tag');
+
+                    tag.textContent = status.toUpperCase();
+
+                    switch (status) {
+                        case 'online':
+                            tag.textContent = 'ONLINE';
+                            tag.classList.remove('is-dark');
+                            tag.classList.add('is-success');
+                            break;
+
+                        case 'offline':
+                        default:
+                            tag.textContent = 'OFFLINE';
+                            tag.classList.remove('is-success');
+                            tag.classList.add('is-dark');
+                            break;
+                    }
+                })
+                .catch(error => console.error('Error fetching status:', error));
+        }
+
+        updateStatus()
     </script>
 </body>
 
